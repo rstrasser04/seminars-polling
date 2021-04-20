@@ -62,13 +62,6 @@ export default function Poll() {
         query: getPoll,
         variables: { id }
       });
-      if (pollData.type === 'image') {
-        await Promise.all(pollData.candidates.items.map(async c => {
-          const image = await Storage.get(c.image);
-          c.image = image;
-          return image;
-        }));
-      }
       dispatch({ type: actionTypes.SET_POLL, poll: pollData });
       subscribe(pollData);
     } catch(err) {

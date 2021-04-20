@@ -56,13 +56,6 @@ export default function Polls() {
         limit: 5
       }
     })
-    await Promise.all(pollData.data.itemsByType.items.map(async poll => {
-      await Promise.all(poll.candidates.items.map(async c => {
-        const image = await Storage.get(c.image)
-        c.image = image
-        return image
-      }))
-    }))
     dispatch({ type: actionTypes.SET_POLL, polls: pollData.data.itemsByType.items })
     pollData.data.itemsByType.items.forEach(item => subscribe(item))
   }
