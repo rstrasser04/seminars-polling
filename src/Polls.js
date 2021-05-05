@@ -18,7 +18,7 @@ function reducer(state, action) {
   switch(action.type) {
     case actionTypes.SET_POLL:
       return {
-        ...state, polls: action.polls, loading: false
+        ...state, polls: action.polls, id: action.id, loading: false
       }
     case actionTypes.UPVOTE:
       const { pollId, candidateId } = action
@@ -51,9 +51,9 @@ export default function Polls() {
     const pollData = await API.graphql({
       query: itemsByType,
       variables: {
-        sortDirection: "ASC",
+        sortDirection: "DESC",
         itemType: "Poll",
-        limit: 5
+        limit: 1
       }
     })
     dispatch({ type: actionTypes.SET_POLL, polls: pollData.data.itemsByType.items })
@@ -61,11 +61,14 @@ export default function Polls() {
   }
 
   function subscribe(pollData) {
-    const { items } = pollData.candidates
-    const { id: pollId } = pollData
-    const id1 = items[0].id
-    const id2 = items[1].id
-
+    const { items } = pollData.candidates || {}
+    const { id: pollId } = pollData.id || {}   
+    const id1 = items[0]
+    const id2 = items[1]
+    const id3 = items[2]
+    const id4 = items[3]
+    const id5 = items[4]
+console.log(pollData.candidates.items)
     subscriptions[id1] = API.graphql({
       query: onUpdateByID,
       variables: { id: id1 }
@@ -77,7 +80,6 @@ export default function Polls() {
         dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
       }
     })
-
     subscriptions[id2] = API.graphql({
       query: onUpdateByID,
       variables: { id: id2 }
@@ -89,6 +91,40 @@ export default function Polls() {
         dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
       }
     })
+    subscriptions[id3] = API.graphql({
+      query: onUpdateByID,
+      variables: { id: id3 }
+    })
+    .subscribe({
+      next: apiData => {
+        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData
+        if (clientId === CLIENT_ID) return
+        dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
+      }
+    })
+    subscriptions[id4] = API.graphql({
+      query: onUpdateByID,
+      variables: { id: id4 }
+    })
+    .subscribe({
+      next: apiData => {
+        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData
+        if (clientId === CLIENT_ID) return
+        dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
+      }
+    })
+    subscriptions[id5] = API.graphql({
+      query: onUpdateByID,
+      variables: { id: id5 }
+    })
+    .subscribe({
+      next: apiData => {
+        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData
+        if (clientId === CLIENT_ID) return
+        dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
+      }
+    })
+
   }
 
   function createLocalUpvote(candidateId, pollId) {
@@ -114,33 +150,25 @@ export default function Polls() {
     })
   }
   if (state.loading) return <h2>Loading...</h2>
-  return (
-    <div>
-      {
-        state.polls.map((poll, index) => (
-          <div className="
-          bg-almostBlack
-          rounded px-4 sm:px-6 py-4 border border-gray-800 mb-4" key={poll.id}>
-            <Link to={`/${poll.id}`}>
-              <h3 className="
-              leading-tight
-              sm:leading-normal
-              transition-all text-3xl hover:text-mainPink
-              sm:text-4xl
-              mb-3
-              font-light
-              ">{poll.name}</h3>
-            </Link>
-            <Candidates
-              key={index}
-              candidates={poll.candidates.items}
-              poll={poll}
-              onUpVote={onUpVote}
-            />
-          </div>
-        ))
-      }
-    </div>
+    return (
+      <div> 
+          {
+            
+            state.polls.map((poll, index) => (  
+                <div className="polls" key={poll.id}>
+                    <Link to={`/${poll.id}`}>
+                      <h2 className="poll-name">{poll.name}</h2>
+                    </Link>
+                    {/* <Candidates
+                      key={index}
+                      candidates={poll.candidates.items}
+                      poll={poll}
+                      onUpVote={onUpVote}
+                    /> */}
+                  </div> 
+            ))
+          }
+      </div>
   )
 }
 

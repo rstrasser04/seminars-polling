@@ -1,158 +1,112 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { STORAGE_KEY } from './utils/localStorageInfo';
 import votePink from './assets/votepink.png';
 import voteBlue from './assets/voteblue.png';
 import Button from './Button';
 import { toast, ToastContainer } from 'react-toastify';
+import orderBy from 'lodash/orderBy'
 
 export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes, pollView = false }) {
   const isImage = poll.type === 'image';
   let totalUpvotes;
   let candidate1;
   let candidate2;
+  let candidate3;
+  let candidate4;
+  let candidate5;
+  
   if (pollView) {
     /* If this is poll view, create percentages for chart */
     totalUpvotes = candidates.reduce((acc, next) => acc + next.upvotes, 0);
-    candidate1 = candidates[0].upvotes ? (candidates[0].upvotes / totalUpvotes) * 100 : 0;
-    candidate2 = candidates[1].upvotes ? (candidates[1].upvotes / totalUpvotes) * 100 : 0;
+    if (candidates <= 0){
+      throw console.error('this is an error');
+    } else {
+      candidate1 = candidates[0].upvotes ? (candidates[0].upvotes / totalUpvotes) * 100 : 0;
+      candidate2 = candidates[1].upvotes ? (candidates[1].upvotes / totalUpvotes) * 100 : 0;
+      candidate3 = candidates[2].upvotes ? (candidates[2].upvotes / totalUpvotes) * 100 : 0;
+      candidate4 = candidates[3].upvotes ? (candidates[3].upvotes / totalUpvotes) * 100 : 0;
+      candidate5 = candidates[4].upvotes ? (candidates[4].upvotes / totalUpvotes) * 100 : 0;     
+    }
   }
   if (totalUpvotes === 0) {
     /* If poll is new, set 50% width for each side of chart */
     candidate1 = 50;
     candidate2 = 50;
+    candidate3 = 50;
+    candidate4 = 50;
+    candidate5 = 50;
   }
 
   const voteDataFromStorage = JSON.parse(localStorage.getItem(STORAGE_KEY));
   if (voteDataFromStorage && voteDataFromStorage[poll.id]) {
     /* If user has voted 50 times for a candidate, disable voting */
-    const c1 = voteDataFromStorage[poll.id][candidates[0].id];
-    const c2 = voteDataFromStorage[poll.id][candidates[1].id];
-    if (c1 && (c1.upvotes >= 50)) candidates[0].isDisabled = true;
-    if (c2 && (c2.upvotes >= 50)) candidates[1].isDisabled = true;
+    const c1 = voteDataFromStorage[poll.id][candidates[0]];
+    const c2 = voteDataFromStorage[poll.id][candidates[1]];
+    const c3 = voteDataFromStorage[poll.id][candidates[2]];
+    const c4 = voteDataFromStorage[poll.id][candidates[3]];
+    const c5 = voteDataFromStorage[poll.id][candidates[4]];
+    if (c1 && (c1.upvotes >= 1)) candidates[0].isDisabled = true;
+    if (c2 && (c2.upvotes >= 1)) candidates[1].isDisabled = true;
+    if (c3 && (c3.upvotes >= 1)) candidates[2].isDisabled = true;
+    if (c4 && (c4.upvotes >= 1)) candidates[3].isDisabled = true; 
+    if (c5 && (c5.upvotes >= 1)) candidates[4].isDisabled = true;
   }
 
+/* console.log(poll.id)
+  const sortedCandidates = candidates.sort(function(a,b){
+    console.log(candidates)
+    return parseInt(a.name)  - parseInt(b.name);
+  })
+  console.log(sortedCandidates) */
+
+  const alphabetized = candidates.sort(function(a, b) {
+    if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+    if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+    return 0;
+   })
+   
   return (
-    <div>
+    <div className="pollContainer">
       {
         /* This is the data vizualization. Essentially a rectangle filled with the percentage width of each candidate. */
         pollView && (
-          <div style={dataVizStyle}>
+          <div style={dataVizStyle} className="pollView">
             <div style={candidate1Style(candidate1)} />
             <div style={candidate2Style(candidate2)} />
+            <div style={candidate3Style(candidate3)} />
+            <div style={candidate4Style(candidate4)} />
+            <div style={candidate5Style(candidate5)} />
           </div>
         )
       }
-      <div className={`flex ${isImage ? 'flex-col mt-6' : 'flex-col md:flex-row mt-4'}`}>
+
+      <div className="candidate-container">
         {
-          candidates.map((candidate, index) => {
-            if (poll.type === 'text') {
+          
+          candidates.map((candidate, index) => {  
               return (
-                <div className="mt-4 flex items-center" key={candidate.id}>
+                <div className="mt-4 flex items-center" key={candidate.name}>
+                  
                   <div className="flex mr-4">
-                    <p className="capitalize text-2xl sm:text-4xl font-bold">{candidate.name}</p>
+                    <button onClick={candidate.isDisabled ? null : () => onUpVote(candidate, poll)} className="vote-button w-12 md:w-18 capitalize text-2xl sm:text-4xl font-bold" style={voteImageContainerStyle(index, candidate.isDisabled)}>{candidate.name}</button>
                   </div>
                   <div className="flex items-center">
-                    <div style={voteImageContainerStyle(index, candidate.isDisabled)} className="w-12 md:w-18">
-                      <img
-                        onClick={candidate.isDisabled ? null : () => onUpVote(candidate, poll)}
-                        src={index == Number(0) ? votePink : voteBlue}
-                      />
-                    </div>
                     <p className="
                     w-20
                     text-4xl font-bold ml-3" style={voteNameStyle(index)}>{candidate.upvotes}</p>
                   </div>
                 </div>
-              )
-            }
-            return (
-              <div className="flex items-center" key={candidate.id}>
-                <div className={`flex relative ${index === Number(0) ? 'mb-4' : 'mb-0'}`}>
-                  <Link style={linkStyle(pollView)} to={`/${poll.id}`}>
-                    <img
-                      src={candidate.image}
-                      style={candidateImageStyle(index)}
-                      className="
-                      sm:min-w-80
-                      w-full
-                      xs1:w-112
-                      xs2:w-100
-                      xs3:w-88 xs3:h-72
-                      sm:w-full
-                      sm:h-64
-                      lg:max-w-2xl
-                      min-w-60
-                      min-h-60
-                      "
-                    />
-                  </Link>
-                  <div className="
-                    block sm:hidden
-                    ml-2
-                    absolute
-                    bottom-0 left-0 mb-2
-                  ">
-                    <ImageVoteBlock
-                      poll={poll}
-                      onUpVote={onUpVote}
-                      candidate={candidate}
-                      index={index}
-                    />
-                  </div>
-                </div>
-                <div className="hidden sm:block">
-                  <ImageVoteBlock
-                    poll={poll}
-                    onUpVote={onUpVote}
-                    candidate={candidate}
-                    index={index}
-                  />
-                </div>
-              </div>
-            )
+              )   
           })
         }
+        
+      </div> 
+      <div className="totalVotes">
+        <h1>
+          {totalUpvotes}
+        </h1>
       </div>
-      {
-        pollView && (
-          <div className="mt-6">
-            <Button
-              emoji="🌍"
-              title="Share"
-              onClick={
-                () => {
-                  const url = window.location.href;
-                  navigator.clipboard.writeText(url);
-                  toast("Successfully copied to clipboard!", {
-                    className: 'toast-background',
-                  });
-                }
-              }
-            />
-            <ToastContainer />
-          </div>
-        )
-      }
-    </div>
-  )
-}
-
-function ImageVoteBlock({
-  index, candidate, poll, onUpVote
-}) {
-  return (
-    <div className="
-    flex items-center
-    ml-0 sm:ml-4
-    ">
-      <div style={voteImageContainerStyle(index, candidate.isDisabled)} className="w-12 md:w-18">
-        <img
-          onClick={() => onUpVote(candidate, poll)}
-          src={index == Number(0) ? votePink : voteBlue}
-        />
-      </div>
-      <p className="w-24 ml-3 text-4xl font-bold" style={voteNameStyle(index)}>{candidate.upvotes}</p>
     </div>
   )
 }
@@ -173,7 +127,7 @@ function linkStyle(pollView) {
 
 function candidate1Style(width) {
   return {
-    backgroundColor: '#ff00e4',
+    backgroundColor: '#ff6600',
     width: `${width}%`,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
@@ -183,7 +137,31 @@ function candidate1Style(width) {
 
 function candidate2Style(width) {
   return {
-    backgroundColor: '#0090ff',
+    backgroundColor: '#666666',
+    width: `${width}%`,
+    transition: 'all 0.5s ease'
+  }
+}
+
+function candidate3Style(width) {
+  return {
+    backgroundColor: '#6699CC',
+    width: `${width}%`,
+    transition: 'all 0.5s ease'
+  }
+}
+
+function candidate4Style(width) {
+  return {
+    backgroundColor: '#333333',
+    width: `${width}%`,
+    transition: 'all 0.5s ease'
+  }
+}
+
+function candidate5Style(width) {
+  return {
+    backgroundColor: '#2E8BC9',
     width: `${width}%`,
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
@@ -192,7 +170,7 @@ function candidate2Style(width) {
 }
 
 const voteImageContainerStyle = (index, isDisabled) => ({
-  backgroundColor: index === Number(0) ? "#ff00e4" : "#0090ff",
+  backgroundColor: index === Number(0) ? "#ff6600" : index === Number(1) ? "#666666" : index === Number(2) ? "#6699CC" : index === Number(3) ? "#333333" : "#2E8BC9",
   boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0.125rem 0.25rem',
   borderRadius: 9999,
   opacity: isDisabled ? .5 : 1,
@@ -203,7 +181,7 @@ const voteImageContainerStyle = (index, isDisabled) => ({
 function candidateImageStyle(index) {
   const indexzero = index === Number(0)
   return {
-    border: `1px solid ${indexzero ? "#ff00e4" : "#0090ff"}`,
+    border: `1px solid ${indexzero ? "#ff6600" : "#666666"}`,
     objectFit: 'contain',
   }
 }
@@ -211,6 +189,6 @@ function candidateImageStyle(index) {
 function voteNameStyle(index) {
   const indexzero = index === Number(0)
   return {
-    color: indexzero ? "#ff00e4" : "#0090ff",
+    color: index === Number(0) ? "#ff6600" : index === Number(1) ? "#666666" : index === Number(2) ? "#6699CC" : index === Number(3) ? "#333333" : "#2E8BC9",
   }
 }

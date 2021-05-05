@@ -15,6 +15,9 @@ const initialState = {
   pollType: null,
   candidate1: null,
   candidate2: null,
+  candidate3: null,
+  candidate4: null,
+  candidate5: null,
   pollName: null,
   isUploading: false
 }
@@ -89,23 +92,44 @@ export default function CreatePoll() {
         name: isImage ? null : candidate2,
         image: isImage ? candidate2.fileName : null
       }
+      const candidate3Data = {
+        pollCandidatesId: pollId,
+        upvotes: 0,
+        name: isImage ? null : candidate3,
+        image: isImage ? candidate3.fileName : null
+      }
+      const candidate4Data = {
+        pollCandidatesId: pollId,
+        upvotes: 0,
+        name: isImage ? null : candidate4,
+        image: isImage ? candidate4.fileName : null
+      }
+      const candidate5Data = {
+        pollCandidatesId: pollId,
+        upvotes: 0,
+        name: isImage ? null : candidate5,
+        image: isImage ? candidate5.fileName : null
+      }
 
       const createPollPromise = API.graphql({ query: createPollMutation, variables: { input: pollData } });
       const createCandidate1Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate1Data } });
       const createCandidate2Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate2Data } });
-      await Promise.all([createPollPromise, createCandidate1Promise, createCandidate2Promise])
+      const createCandidate3Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate3Data } });
+      const createCandidate4Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate4Data } });
+      const createCandidate5Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate5Data } });
+      await Promise.all([createPollPromise, createCandidate1Promise, createCandidate2Promise, createCandidate3Promise, createCandidate4Promise, createCandidate5Promise])
 
       const url = `/${pollId}`
-      history.push(url)
+      history.go(url)
     } catch(err) {
       console.log('error: ', err)
     }
   }
 
   const {
-    pollType, candidate1, candidate2, pollName, isUploading
+    pollType, candidate1, candidate2, candidate3, candidate4, candidate5, pollName, isUploading
   } = state
-  const isDisabled = (!pollType || !candidate1 || !candidate2 || !pollName)
+  const isDisabled = (!pollType || !candidate1 || !candidate2 || !candidate3 || !candidate4 || !candidate5 || !pollName)
 
   return (
     <div>
@@ -120,12 +144,6 @@ export default function CreatePoll() {
             onClick={() => setPollType('text')}
             title="Text"
             emoji="🦄"
-          />
-          <Button
-            onClick={() => setPollType('image')}
-            title="Image"
-            emoji="🐶"
-            backgroundColor="#0090ff"
           />
         </div>
       </div>
@@ -158,6 +176,34 @@ export default function CreatePoll() {
               className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"
 
             />
+            <p className="mb-2 mt-4 font-bold">Third answer</p>
+            <input
+              placeholder="Answer 3"
+              name="candidate3"
+              onChange={onChangeText}
+              autoComplete="off"
+              className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"
+
+            />
+            <p className="mb-2 mt-4 font-bold">Fourth answer</p>
+            <input
+              placeholder="Answer 4"
+              name="candidate4"
+              onChange={onChangeText}
+              autoComplete="off"
+              className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"
+
+            />
+            <p className="mb-2 mt-4 font-bold">Fifth answer</p>
+            <input
+              placeholder="Answer 5"
+              name="candidate5"
+              onChange={onChangeText}
+              autoComplete="off"
+              className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"
+
+            />
+
           </div>
         )
       }

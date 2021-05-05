@@ -7,7 +7,7 @@ export default function Header() {
   const history = useHistory();
   let { pathname } = useLocation();
   function createPoll() {
-    history.push("/create");
+    history.go("/create");
   }
   console.log('pathName:', pathname)
   return (

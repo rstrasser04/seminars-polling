@@ -5,6 +5,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import { FaWindowMinimize } from 'react-icons/fa';
 
 import Polls from './Polls';
 import Poll from './Poll';
@@ -16,8 +17,10 @@ export default function Router() {
   return (
     <BrowserRouter>
       <div className="site-container">
-        <Header />
-        <div className="
+        <div className="background">
+          <h1><FaWindowMinimize/>Poll Question</h1>
+        </div>
+        <div className="poll-wrapper 
           w-full lg:w-main
           px-4 md:px-8 lg:px-0
         ">
