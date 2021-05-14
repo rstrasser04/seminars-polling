@@ -201,9 +201,7 @@ export default function CreatePoll() {
               onChange={onChangeText}
               autoComplete="off"
               className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"
-
             />
-
           </div>
         )
       }
@@ -272,7 +270,7 @@ export default function CreatePoll() {
               title="Create Poll"
               emoji="🚀"
               backgroundColor="#0090ff"
-              disabled={isDisabled || isUploading}
+              /* disabled={isDisabled || isUploading} */
             />
           </div>
         )

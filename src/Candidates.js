@@ -21,12 +21,18 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
     totalUpvotes = candidates.reduce((acc, next) => acc + next.upvotes, 0);
     if (candidates <= 0){
       throw console.error('this is an error');
+    } else if (candidates === 4){
+      candidate1 = candidates[0].upvotes ? (candidates[0].upvotes / totalUpvotes) * 100 : 0;
+      candidate2 = candidates[1].upvotes ? (candidates[1].upvotes / totalUpvotes) * 100 : 0;
+      candidate3 = candidates[2].upvotes ? (candidates[2].upvotes / totalUpvotes) * 100 : 0;
+      candidate4 = candidates[3].upvotes ? (candidates[3].upvotes / totalUpvotes) * 100 : 0;
+      /* candidate5 = candidates[4].upvotes ? (candidates[4].upvotes / totalUpvotes) * 100 : 0; */     
     } else {
       candidate1 = candidates[0].upvotes ? (candidates[0].upvotes / totalUpvotes) * 100 : 0;
       candidate2 = candidates[1].upvotes ? (candidates[1].upvotes / totalUpvotes) * 100 : 0;
       candidate3 = candidates[2].upvotes ? (candidates[2].upvotes / totalUpvotes) * 100 : 0;
       candidate4 = candidates[3].upvotes ? (candidates[3].upvotes / totalUpvotes) * 100 : 0;
-      candidate5 = candidates[4].upvotes ? (candidates[4].upvotes / totalUpvotes) * 100 : 0;     
+      candidate5 = candidates[4].upvotes ? (candidates[4].upvotes / totalUpvotes) * 100 : 0;    
     }
   }
   if (totalUpvotes === 0) {
