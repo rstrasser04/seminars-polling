@@ -7,6 +7,7 @@
     "@aws-amplify/auth": "^3.2.7",
     "@aws-amplify/core": "^3.2.6",
     "@aws-amplify/storage": "^3.2.0",
+    "@babel/helper-define-map": "^7.13.12",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
