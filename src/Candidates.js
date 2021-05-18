@@ -140,7 +140,8 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
           {totalUpvotes}
         </h1>
       </div>
-          <button className='backButton' onClick={() => history.goBack()}>Back</button>
+      <button className='backButton' onClick={() => history.goBack()}>Back</button>
+      <button className='reloadButton'onClick={() => window.location.reload(false)}>Reload</button>
     </div>
   )
 }

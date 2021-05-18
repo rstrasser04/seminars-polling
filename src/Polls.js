@@ -124,6 +124,7 @@ export default function Polls() {
                     <Link to={`/${poll.id}`}>
                       <h2 className="poll-name">{poll.name}</h2>
                     </Link>
+                    <button className='reloadButton'onClick={() => window.location.reload(false)}>Reload</button>
                     {/* <Candidates
                       key={index}
                       candidates={poll.candidates.items}

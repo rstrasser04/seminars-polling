@@ -156,4 +156,19 @@ select option {
   float:right;
   text-align: center;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  margin-right:10px;
+}
+.reloadButton {
+  background: rgb(102,153,204);
+  border-color:rgb(102,153,204);
+  margin-right: 10px;
+  padding: .5rem 1rem;
+  color:#fff;
+  margin-right: 10px;
+  padding: .5rem 1rem;
+  font-size:1rem;
+  font-weight:400;
+  line-height: 1.5;
+  text-align: center;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
