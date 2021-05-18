@@ -109,6 +109,7 @@ select option {
 .pollContainer {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
 }
 .pollView {
   margin-bottom:10px;
@@ -142,4 +143,17 @@ select option {
 .totalVotes h1 {
   color: #000000;
   font-size: 8rem;
+}
+
+.backButton {
+  background:#ff6600;
+  border-color:#ff6600;
+  color:#fff;
+  padding: .5rem 1rem;
+  font-size:1rem;
+  font-weight:400;
+  line-height: 1.5;
+  float:right;
+  text-align: center;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }

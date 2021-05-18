@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { STORAGE_KEY } from './utils/localStorageInfo';
 import votePink from './assets/votepink.png';
 import voteBlue from './assets/voteblue.png';
@@ -8,6 +8,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import orderBy from 'lodash/orderBy'
 
 export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes, pollView = false }) {
+  const history = useHistory();
+  
   const isImage = poll.type === 'image';
   let totalUpvotes;
   let candidate1;
@@ -138,6 +140,7 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
           {totalUpvotes}
         </h1>
       </div>
+          <button className='backButton' onClick={() => history.goBack()}>Back</button>
     </div>
   )
 }
