@@ -52,8 +52,14 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
   const voteDataFromStorage = JSON.parse(localStorage.getItem(STORAGE_KEY));
   if (voteDataFromStorage && voteDataFromStorage[poll.id]) {
     /* If user has voted 50 times for a candidate, disable voting */
+    const c1 = voteDataFromStorage[poll.id][candidates[0].id];
+    const c2 = voteDataFromStorage[poll.id][candidates[1].id];
+    const c3 = voteDataFromStorage[poll.id][candidates[2].id];
+    if (c1 && (c1.upvotes >= 50)) candidates[0].isDisabled = true;
+    if (c2 && (c2.upvotes >= 50)) candidates[1].isDisabled = true;
+    if (c3 && (c3.upvotes >= 50)) candidates[2].isDisabled = true;
 
-    if (candidates.length === 4) {
+    if (candidates == 4) {
       const c1 = voteDataFromStorage[poll.id][candidates[0].id];
       const c2 = voteDataFromStorage[poll.id][candidates[1].id];
       const c3 = voteDataFromStorage[poll.id][candidates[2].id];
@@ -62,7 +68,8 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
       if (c2 && (c2.upvotes >= 50)) candidates[1].isDisabled = true;
       if (c3 && (c3.upvotes >= 50)) candidates[2].isDisabled = true;
       if (c4 && (c4.upvotes >= 50)) candidates[3].isDisabled = true;
-    } else if (candidates.length === 5) {
+    }
+    if (candidates == 5) {
       const c1 = voteDataFromStorage[poll.id][candidates[0].id];
       const c2 = voteDataFromStorage[poll.id][candidates[1].id];
       const c3 = voteDataFromStorage[poll.id][candidates[2].id];
@@ -73,13 +80,6 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
       if (c3 && (c3.upvotes >= 50)) candidates[2].isDisabled = true;
       if (c4 && (c4.upvotes >= 50)) candidates[3].isDisabled = true;
       if (c5 && (c5.upvotes >= 50)) candidates[4].isDisabled = true;
-    } else {
-      const c1 = voteDataFromStorage[poll.id][candidates[0].id];
-      const c2 = voteDataFromStorage[poll.id][candidates[1].id];
-      const c3 = voteDataFromStorage[poll.id][candidates[2].id];
-      if (c1 && (c1.upvotes >= 50)) candidates[0].isDisabled = true;
-      if (c2 && (c2.upvotes >= 50)) candidates[1].isDisabled = true;
-      if (c3 && (c3.upvotes >= 50)) candidates[2].isDisabled = true;
     }
   }
    
@@ -106,13 +106,21 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
                 <div className="mt-4 flex items-center" key={candidate.name}>
                   
                   <div className="flex mr-4">
-                    <button onClick={candidate.isDisabled ? null : () => onUpVote(candidate, poll)} className="vote-button w-12 md:w-18 capitalize text-2xl sm:text-4xl font-bold" style={voteImageContainerStyle(index, candidate.isDisabled)}>{candidate.name}</button>
+                    {candidate.name === null ? 
+                      <button style={{ display: 'none'}}>{candidate.name}</button> 
+                    :
+                      <button onClick={candidate.isDisabled ? null : () => onUpVote(candidate, poll)} className="vote-button w-12 md:w-18 capitalize text-2xl sm:text-4xl font-bold" style={voteImageContainerStyle(index, candidate.isDisabled)}>{candidate.name}</button>
+                    }
                   </div>
                   <div className="flex items-center">
+                  {candidate.name === null ?
+                    <p style={{ display: 'none' }}>{candidate.upvotes}</p>
+                  :  
                     <p className="
                     w-20
                     text-4xl font-bold ml-3" style={voteNameStyle(index)}>{candidate.upvotes}</p>
-                  </div>
+                    }
+                    </div>
                 </div>
               )   
           })

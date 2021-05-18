@@ -68,6 +68,13 @@ export default function Poll() {
         query: getPoll,
         variables: { id }
       });
+      if (pollData.type === 'image') {
+        await Promise.all(pollData.candidates.items.map(async c => {
+          const image = await Storage.get(c.image);
+          c.image = image;
+          return image;
+        }));
+      }
       dispatch({ type: actionTypes.SET_POLL, poll: pollData });
       subscribe(pollData);
     } catch(err) {
@@ -138,18 +145,6 @@ export default function Poll() {
         dispatch({ type: actionTypes.UPVOTE, id });
       }
     })
-
-    subscription5 = API.graphql({
-      query: onUpdateByID,
-      variables: { id: id5 }
-    })
-    .subscribe({
-      next: apiData => {
-        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData;
-        if (clientId === CLIENT_ID) return;
-        dispatch({ type: actionTypes.UPVOTE, id });
-      }
-    })
   }
 
   async function onUpVote(candidate) {
@@ -168,7 +163,7 @@ export default function Poll() {
   }
   
   if (state.loading) return <h2>Loading...</h2>
-
+  console.log(state.poll.id)
   return (
     <div>
       <h1 className="mb-4 mt-8 leading-tight sm:leading-normal font-light">{state.poll.name}</h1>
