@@ -103,6 +103,7 @@ select option {
   padding:10px 20px;
   width: 100%;
   background-color: #b6b6b6;
+  zoom:92%;
 }
 .pollContainer {
   display: flex;
@@ -134,7 +135,7 @@ select option {
 .totalVotes {
   width:50%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 .totalVotes h1 {
