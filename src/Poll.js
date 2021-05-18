@@ -91,10 +91,10 @@ export default function Poll() {
 
   function subscribe(pollData) {
     const { items } = pollData.candidates;
-    const id1 = items[0].id;
-    const id2 = items[1].id;
-    const id3 = items[2].id;
-    const id4 = items[3].id;
+    const id1 = items[0]
+    const id2 = items[1]
+    const id3 = items[2]
+    const id4 = items[3]
     const id5 = items[4];
 
     items.sort();
