@@ -114,6 +114,7 @@ export default function Polls() {
     })
   }
   if (state.loading) return <h2>Loading...</h2>
+  console.log(state.polls)
     return (
       <div> 
           {
