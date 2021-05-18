@@ -15,99 +15,73 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
   let candidate3;
   let candidate4;
   let candidate5;
-  
+
   if (pollView) {
-    /* If this is poll view, create percentages for chart */
+    console.log(candidates)
     totalUpvotes = candidates.reduce((acc, next) => acc + next.upvotes, 0);
-    if (candidates <= 0){
-      throw console.error('this is an error');
-    } 
-    if (candidates === 3){
+    /* If this is poll view, create percentages for chart */
+  if (candidates.length === 4) {
       candidate1 = candidates[0].upvotes ? (candidates[0].upvotes / totalUpvotes) * 100 : 0;
       candidate2 = candidates[1].upvotes ? (candidates[1].upvotes / totalUpvotes) * 100 : 0;
       candidate3 = candidates[2].upvotes ? (candidates[2].upvotes / totalUpvotes) * 100 : 0;
-    }
-    if (candidates === 4){
-      candidate1 = candidates[0].upvotes ? (candidates[0].upvotes / totalUpvotes) * 100 : 0;
-      candidate2 = candidates[1].upvotes ? (candidates[1].upvotes / totalUpvotes) * 100 : 0;
-      candidate3 = candidates[2].upvotes ? (candidates[2].upvotes / totalUpvotes) * 100 : 0;
-      candidate4 = candidates[3].upvotes ? (candidates[3].upvotes / totalUpvotes) * 100 : 0;   
-    } 
-    if (candidates === 5){
+      candidate4 = candidates[3].upvotes ? (candidates[3].upvotes / totalUpvotes) * 100 : 0;  
+  } else if (candidates.length === 5) {
+      totalUpvotes = candidates.reduce((acc, next) => acc + next.upvotes, 0);
       candidate1 = candidates[0].upvotes ? (candidates[0].upvotes / totalUpvotes) * 100 : 0;
       candidate2 = candidates[1].upvotes ? (candidates[1].upvotes / totalUpvotes) * 100 : 0;
       candidate3 = candidates[2].upvotes ? (candidates[2].upvotes / totalUpvotes) * 100 : 0;
       candidate4 = candidates[3].upvotes ? (candidates[3].upvotes / totalUpvotes) * 100 : 0;
-      candidate5 = candidates[4].upvotes ? (candidates[4].upvotes / totalUpvotes) * 100 : 0;    
-    }
+      candidate5 = candidates[4].upvotes ? (candidates[4].upvotes / totalUpvotes) * 100 : 0;  
+  } else {
+    totalUpvotes = candidates.reduce((acc, next) => acc + next.upvotes, 0);
+    candidate1 = candidates[0].upvotes ? (candidates[0].upvotes / totalUpvotes) * 100 : 0;
+    candidate2 = candidates[1].upvotes ? (candidates[1].upvotes / totalUpvotes) * 100 : 0;
+    candidate3 = candidates[2].upvotes ? (candidates[2].upvotes / totalUpvotes) * 100 : 0;
+  }
+   
   }
   if (totalUpvotes === 0) {
-    if (candidates === 3){/* If poll is new, set 50% width for each side of chart */
-      candidate1 = 50;
-      candidate2 = 50;
-      candidate3 = 50;
-    }
-    if (candidates === 4){
-      candidate1 = 50;
-      candidate2 = 50;
-      candidate3 = 50;
-      candidate4 = 50;
-    }
-    if (candidates === 5){
-      candidate1 = 50;
-      candidate2 = 50;
-      candidate3 = 50;
-      candidate4 = 50;
-      candidate4 = 50;
-    }
+    /* If poll is new, set 50% width for each side of chart */
+    candidate1 = 50;
+    candidate2 = 50;
+    candidate3 = 50;
+    candidate4 = 50;
+    candidate5 = 50;
   }
 
   const voteDataFromStorage = JSON.parse(localStorage.getItem(STORAGE_KEY));
   if (voteDataFromStorage && voteDataFromStorage[poll.id]) {
-    if (candidates === 3){
-      const c1 = voteDataFromStorage[poll.id][candidates[0]];
-      const c2 = voteDataFromStorage[poll.id][candidates[1]];
-      const c3 = voteDataFromStorage[poll.id][candidates[2]];
-      if (c1 && (c1.upvotes >= 1)) candidates[0].isDisabled = true;
-      if (c2 && (c2.upvotes >= 1)) candidates[1].isDisabled = true;
-      if (c3 && (c3.upvotes >= 1)) candidates[2].isDisabled = true;
+    /* If user has voted 50 times for a candidate, disable voting */
+    const c1 = voteDataFromStorage[poll.id][candidates[0].id];
+    const c2 = voteDataFromStorage[poll.id][candidates[1].id];
+    const c3 = voteDataFromStorage[poll.id][candidates[2].id];
+    if (c1 && (c1.upvotes >= 50)) candidates[0].isDisabled = true;
+    if (c2 && (c2.upvotes >= 50)) candidates[1].isDisabled = true;
+    if (c3 && (c3.upvotes >= 50)) candidates[2].isDisabled = true;
+
+    if (candidates == 4) {
+      const c1 = voteDataFromStorage[poll.id][candidates[0].id];
+      const c2 = voteDataFromStorage[poll.id][candidates[1].id];
+      const c3 = voteDataFromStorage[poll.id][candidates[2].id];
+      const c4 = voteDataFromStorage[poll.id][candidates[3].id];
+      if (c1 && (c1.upvotes >= 50)) candidates[0].isDisabled = true;
+      if (c2 && (c2.upvotes >= 50)) candidates[1].isDisabled = true;
+      if (c3 && (c3.upvotes >= 50)) candidates[2].isDisabled = true;
+      if (c4 && (c4.upvotes >= 50)) candidates[3].isDisabled = true;
     }
-    if (candidates === 4){
-      const c1 = voteDataFromStorage[poll.id][candidates[0]];
-      const c2 = voteDataFromStorage[poll.id][candidates[1]];
-      const c3 = voteDataFromStorage[poll.id][candidates[2]];
-      const c4 = voteDataFromStorage[poll.id][candidates[3]];
-      if (c1 && (c1.upvotes >= 1)) candidates[0].isDisabled = true;
-      if (c2 && (c2.upvotes >= 1)) candidates[1].isDisabled = true;
-      if (c3 && (c3.upvotes >= 1)) candidates[2].isDisabled = true;
-      if (c4 && (c4.upvotes >= 1)) candidates[3].isDisabled = true; 
-    }
-    if (candidates === 5) {
-      const c1 = voteDataFromStorage[poll.id][candidates[0]];
-      const c2 = voteDataFromStorage[poll.id][candidates[1]];
-      const c3 = voteDataFromStorage[poll.id][candidates[2]];
-      const c4 = voteDataFromStorage[poll.id][candidates[3]];
-      const c5 = voteDataFromStorage[poll.id][candidates[4]];
-      if (c1 && (c1.upvotes >= 1)) candidates[0].isDisabled = true;
-      if (c2 && (c2.upvotes >= 1)) candidates[1].isDisabled = true;
-      if (c3 && (c3.upvotes >= 1)) candidates[2].isDisabled = true;
-      if (c4 && (c4.upvotes >= 1)) candidates[3].isDisabled = true; 
-      if (c5 && (c5.upvotes >= 1)) candidates[4].isDisabled = true;
+    if (candidates == 5) {
+      const c1 = voteDataFromStorage[poll.id][candidates[0].id];
+      const c2 = voteDataFromStorage[poll.id][candidates[1].id];
+      const c3 = voteDataFromStorage[poll.id][candidates[2].id];
+      const c4 = voteDataFromStorage[poll.id][candidates[3].id];
+      const c5 = voteDataFromStorage[poll.id][candidates[4].id];
+      if (c1 && (c1.upvotes >= 50)) candidates[0].isDisabled = true;
+      if (c2 && (c2.upvotes >= 50)) candidates[1].isDisabled = true;
+      if (c3 && (c3.upvotes >= 50)) candidates[2].isDisabled = true;
+      if (c4 && (c4.upvotes >= 50)) candidates[3].isDisabled = true;
+      if (c5 && (c5.upvotes >= 50)) candidates[4].isDisabled = true;
     }
   }
-
-/* console.log(poll.id)
-  const sortedCandidates = candidates.sort(function(a,b){
-    console.log(candidates)
-    return parseInt(a.name)  - parseInt(b.name);
-  })
-  console.log(sortedCandidates) */
-
-  const alphabetized = candidates.sort(function(a, b) {
-    if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-    if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-    return 0;
-   })
    
   return (
     <div className="pollContainer">

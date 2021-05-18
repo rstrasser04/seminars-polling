@@ -18,7 +18,7 @@ function reducer(state, action) {
   switch(action.type) {
     case actionTypes.SET_POLL:
       return {
-        ...state, polls: action.polls, id: action.id, loading: false
+        ...state, polls: action.polls, loading: false
       }
     case actionTypes.UPVOTE:
       const { pollId, candidateId } = action
@@ -61,14 +61,11 @@ export default function Polls() {
   }
 
   function subscribe(pollData) {
-    const { items } = pollData.candidates || {}
-    const { id: pollId } = pollData.id || {}   
-    const id1 = items[0]
-    const id2 = items[1]
-    const id3 = items[2]
-    const id4 = items[3]
-    const id5 = items[4]
-console.log(pollData.candidates.items)
+    const { items } = pollData.candidates
+    const { id: pollId } = pollData
+    const id1 = items[0].id
+    const id2 = items[1].id
+
     subscriptions[id1] = API.graphql({
       query: onUpdateByID,
       variables: { id: id1 }
@@ -80,6 +77,7 @@ console.log(pollData.candidates.items)
         dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
       }
     })
+
     subscriptions[id2] = API.graphql({
       query: onUpdateByID,
       variables: { id: id2 }
@@ -91,40 +89,6 @@ console.log(pollData.candidates.items)
         dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
       }
     })
-    subscriptions[id3] = API.graphql({
-      query: onUpdateByID,
-      variables: { id: id3 }
-    })
-    .subscribe({
-      next: apiData => {
-        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData
-        if (clientId === CLIENT_ID) return
-        dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
-      }
-    })
-    subscriptions[id4] = API.graphql({
-      query: onUpdateByID,
-      variables: { id: id4 }
-    })
-    .subscribe({
-      next: apiData => {
-        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData
-        if (clientId === CLIENT_ID) return
-        dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
-      }
-    })
-    subscriptions[id5] = API.graphql({
-      query: onUpdateByID,
-      variables: { id: id5 }
-    })
-    .subscribe({
-      next: apiData => {
-        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData
-        if (clientId === CLIENT_ID) return
-        dispatch({ type: actionTypes.UPVOTE, pollId, candidateId: id })
-      }
-    })
-
   }
 
   function createLocalUpvote(candidateId, pollId) {
