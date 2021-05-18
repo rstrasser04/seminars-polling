@@ -19,6 +19,7 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
   if (pollView) {
     console.log(candidates)
     totalUpvotes = candidates.reduce((acc, next) => acc + next.upvotes, 0);
+    
     /* If this is poll view, create percentages for chart */
   if (candidates.length === 4) {
       candidate1 = candidates[0].upvotes ? (candidates[0].upvotes / totalUpvotes) * 100 : 0;
@@ -82,6 +83,11 @@ export default function Candidates({ poll, candidates, onUpVote, simulateUpvotes
       if (c5 && (c5.upvotes >= 50)) candidates[4].isDisabled = true;
     }
   }
+  const alphabetized = candidates.sort(function(a, b) {
+    if(a.name < b.name) return -1;
+    if(a.name > b.name) return 1;
+    return 0;
+   })
    
   return (
     <div className="pollContainer">
