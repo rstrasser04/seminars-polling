@@ -18,6 +18,10 @@ const initialState = {
   candidate3: null,
   candidate4: null,
   candidate5: null,
+  candidate6: null,
+  candidate7: null,
+  candidate8: null,
+  candidate9: null,
   pollName: null,
   isUploading: false
 }
@@ -110,6 +114,30 @@ export default function CreatePoll() {
         name: isImage ? null : candidate5,
         image: isImage ? candidate5.fileName : null
       }
+      const candidate6Data = {
+        pollCandidatesId: pollId,
+        upvotes: 0,
+        name: isImage ? null : candidate6,
+        image: isImage ? candidate5.fileName : null
+      }
+      const candidate7Data = {
+        pollCandidatesId: pollId,
+        upvotes: 0,
+        name: isImage ? null : candidate7,
+        image: isImage ? candidate5.fileName : null
+      }
+      const candidate8Data = {
+        pollCandidatesId: pollId,
+        upvotes: 0,
+        name: isImage ? null : candidate8,
+        image: isImage ? candidate5.fileName : null
+      }
+      const candidate9Data = {
+        pollCandidatesId: pollId,
+        upvotes: 0,
+        name: isImage ? null : candidate9,
+        image: isImage ? candidate5.fileName : null
+      }
 
       const createPollPromise = API.graphql({ query: createPollMutation, variables: { input: pollData } });
       const createCandidate1Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate1Data } });
@@ -117,7 +145,11 @@ export default function CreatePoll() {
       const createCandidate3Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate3Data } });
       const createCandidate4Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate4Data } });
       const createCandidate5Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate5Data } });
-      await Promise.all([createPollPromise, createCandidate1Promise, createCandidate2Promise, createCandidate3Promise, createCandidate4Promise, createCandidate5Promise])
+      const createCandidate6Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate6Data } });
+      const createCandidate7Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate7Data } });
+      const createCandidate8Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate8Data } });
+      const createCandidate9Promise = API.graphql({ query: createCandidateMutation, variables: { input: candidate9Data } });
+      await Promise.all([createPollPromise, createCandidate1Promise, createCandidate2Promise, createCandidate3Promise, createCandidate4Promise, createCandidate5Promise, createCandidate6Promise, createCandidate7Promise, createCandidate8Promise, createCandidate9Promise])
 
       const url = `/${pollId}`
       history.go(url)
@@ -127,9 +159,9 @@ export default function CreatePoll() {
   }
 
   const {
-    pollType, candidate1, candidate2, candidate3, candidate4, candidate5, pollName, isUploading
+    pollType, candidate1, candidate2, candidate3, candidate4, candidate5, candidate6, candidate7, candidate8, candidate9, pollName, isUploading
   } = state
-  const isDisabled = (!pollType || !candidate1 || !candidate2 || !candidate3 || !candidate4 || !candidate5 || !pollName)
+  const isDisabled = (!pollType || !candidate1 || !candidate2 || !candidate3 || !candidate4 || !candidate5 || candidate5 || !candidate6 || candidate7 || candidate8 || candidate9 || !pollName)
 
   return (
     <div>
@@ -198,6 +230,38 @@ export default function CreatePoll() {
             <input
               placeholder="Answer 5"
               name="candidate5"
+              onChange={onChangeText}
+              autoComplete="off"
+              className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"
+            />
+            <p className="mb-2 mt-4 font-bold">Sixth answer</p>
+            <input
+              placeholder="Answer 6"
+              name="candidate6"
+              onChange={onChangeText}
+              autoComplete="off"
+              className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"
+            />
+            <p className="mb-2 mt-4 font-bold">Seventh answer</p>
+            <input
+              placeholder="Answer 7"
+              name="candidate7"
+              onChange={onChangeText}
+              autoComplete="off"
+              className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"
+            />
+            <p className="mb-2 mt-4 font-bold">Eighth answer</p>
+            <input
+              placeholder="Answer 8"
+              name="candidate8"
+              onChange={onChangeText}
+              autoComplete="off"
+              className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"
+            />
+            <p className="mb-2 mt-4 font-bold">Ninth answer</p>
+            <input
+              placeholder="Answer 9"
+              name="candidate9"
               onChange={onChangeText}
               autoComplete="off"
               className="w-full text-xl px-2 py-1 outline-none border rounded text-gray-400 bg-gray-900 border-gray-800"

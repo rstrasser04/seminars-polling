@@ -48,6 +48,10 @@ export default function Poll() {
   let subscription3;
   let subscription4;
   let subscription5;
+  let subscription6;
+  let subscription7;
+  let subscription8;
+  let subscription9;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -58,6 +62,10 @@ export default function Poll() {
       subscription3 && subscription3.unsubscribe();
       subscription4 && subscription4.unsubscribe();
       subscription5 && subscription5.unsubscribe();
+      subscription6 && subscription6.unsubscribe();
+      subscription7 && subscription7.unsubscribe();
+      subscription8 && subscription8.unsubscribe();
+      subscription9 && subscription9.unsubscribe();
     }
   }, []);
 
@@ -99,6 +107,10 @@ export default function Poll() {
     const id3 = items[2].id;
     const id4 = items[3].id;
     const id5 = items[4].id;
+    const id6 = items[5].id;
+    const id7 = items[6].id;
+    const id8 = items[7].id;
+    const id9 = items[8].id;
 
     subscription1 = API.graphql({
       query: onUpdateByID,
@@ -137,6 +149,61 @@ export default function Poll() {
     subscription4 = API.graphql({
       query: onUpdateByID,
       variables: { id: id4 }
+    })
+    .subscribe({
+      next: apiData => {
+        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData;
+        if (clientId === CLIENT_ID) return;
+        dispatch({ type: actionTypes.UPVOTE, id });
+      }
+    })
+    subscription5 = API.graphql({
+      query: onUpdateByID,
+      variables: { id: id5 }
+    })
+    .subscribe({
+      next: apiData => {
+        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData;
+        if (clientId === CLIENT_ID) return;
+        dispatch({ type: actionTypes.UPVOTE, id });
+      }
+    })
+    subscription6 = API.graphql({
+      query: onUpdateByID,
+      variables: { id: id6 }
+    })
+    .subscribe({
+      next: apiData => {
+        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData;
+        if (clientId === CLIENT_ID) return;
+        dispatch({ type: actionTypes.UPVOTE, id });
+      }
+    })
+    subscription7 = API.graphql({
+      query: onUpdateByID,
+      variables: { id: id7 }
+    })
+    .subscribe({
+      next: apiData => {
+        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData;
+        if (clientId === CLIENT_ID) return;
+        dispatch({ type: actionTypes.UPVOTE, id });
+      }
+    })
+    subscription8 = API.graphql({
+      query: onUpdateByID,
+      variables: { id: id8 }
+    })
+    .subscribe({
+      next: apiData => {
+        const { value: { data: { onUpdateByID: { id, clientId }}} } = apiData;
+        if (clientId === CLIENT_ID) return;
+        dispatch({ type: actionTypes.UPVOTE, id });
+      }
+    })
+    subscription9 = API.graphql({
+      query: onUpdateByID,
+      variables: { id: id9 }
     })
     .subscribe({
       next: apiData => {
